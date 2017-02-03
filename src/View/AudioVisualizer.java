@@ -6,8 +6,6 @@ package View;
 
 import Spectrums.MagSpectrum;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -32,6 +30,7 @@ public class AudioVisualizer extends Application {
     private ImageView backgroundView;
     private GridPane buttonsGridPane;
     private GridPane viewGridPane;
+    private Group ASLGroup;
     private Stage stage;
     private double sceneWidth;
     private double sceneHeight;
@@ -67,7 +66,7 @@ public class AudioVisualizer extends Application {
         sceneHeight = 360;
 
         initBackground();
-        initAudio();
+        //initAudio();
         initButtonsGridPane();
         initViewGridPane();
 
@@ -146,14 +145,24 @@ public class AudioVisualizer extends Application {
             try {
                 File file = fileChooser.showOpenDialog(stage);
                 Media media = new Media(file.toURI().toASCIIString());
-                audioMediaPlayer.stop();
-                audioMediaPlayer.dispose();
+                if(audioMediaPlayer != null) {
+                    audioMediaPlayer.stop();
+                    audioMediaPlayer.dispose();
+                }
                 audioMediaPlayer = new MediaPlayer(media);
-                ASL.setMediaPlayer(audioMediaPlayer);
+                audioMediaPlayer.setAudioSpectrumInterval(0.05);
+                if(ASL != null) {
+                    ASL.setMediaPlayer(audioMediaPlayer);
+                } else {
+                    ASL = new MagSpectrum(audioMediaPlayer, 0, 0);
+                    ASL.setObjWidth(2);
+                    ASLGroup.getChildren().clear();
+                    ASLGroup.getChildren().add(ASL.getGroup());
+                }
                 audioMediaPlayer.setAudioSpectrumListener(ASL);
                 audioMediaPlayer.play();
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         });
         gridPane.add(musicButton, 3,0);
@@ -165,7 +174,7 @@ public class AudioVisualizer extends Application {
     private void initViewGridPane() {
         GridPane gridPane = new GridPane();
 
-        Group ASLGroup = ASL.getGroup();
+        ASLGroup = new Group();
         gridPane.add(ASLGroup, 0,0);
         GridPane.setHalignment(ASLGroup, HPos.CENTER);
 
