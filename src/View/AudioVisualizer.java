@@ -5,8 +5,10 @@ package View;
  */
 
 import Spectrums.MagSpectrum;
+import Spectrums.WSpectrum;
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,6 +27,7 @@ import java.io.File;
 public class AudioVisualizer extends Application {
 
     private MagSpectrum ASL;
+    private WSpectrum WSL;
     private Media audioMedia;
     private MediaPlayer audioMediaPlayer;
     private ImageView backgroundView;
@@ -121,17 +124,20 @@ public class AudioVisualizer extends Application {
         Button playButton = new Button("play");
         playButton.setOnAction(event -> audioMediaPlayer.play());
         gridPane.add(playButton, 0,0);
-        GridPane.setHalignment(playButton, HPos.CENTER);
+        gridPane.setHalignment(playButton, HPos.CENTER);
+        gridPane.setValignment(playButton, VPos.BOTTOM);
 
         Button pauseButton = new Button("pause");
         pauseButton.setOnAction(event -> audioMediaPlayer.pause());
         gridPane.add(pauseButton, 1,0);
-        GridPane.setHalignment(pauseButton, HPos.CENTER);
+        gridPane.setHalignment(pauseButton, HPos.CENTER);
+        gridPane.setValignment(pauseButton, VPos.BOTTOM);
 
         Button stopButton = new Button("stop");
         stopButton.setOnAction(event -> audioMediaPlayer.stop());
         gridPane.add(stopButton, 2,0);
-        GridPane.setHalignment(stopButton, HPos.CENTER);
+        gridPane.setHalignment(stopButton, HPos.CENTER);
+        gridPane.setValignment(stopButton, VPos.BOTTOM);
 
         Button musicButton = new Button("Choose Audio");
         musicButton.setOnAction(event -> {
@@ -151,22 +157,24 @@ public class AudioVisualizer extends Application {
                 }
                 audioMediaPlayer = new MediaPlayer(media);
                 audioMediaPlayer.setAudioSpectrumInterval(0.05);
-                if(ASL != null) {
-                    ASL.setMediaPlayer(audioMediaPlayer);
+                if(WSL != null) {
+                    //WSL.setMediaPlayer(audioMediaPlayer);
                 } else {
-                    ASL = new MagSpectrum(audioMediaPlayer, 0, 0);
-                    ASL.setObjWidth(2);
+                    //ASL = new MagSpectrum(audioMediaPlayer, 0, 0);
+                    //ASL.setObjWidth(2);
+                    WSL = new WSpectrum(audioMediaPlayer);
                     ASLGroup.getChildren().clear();
-                    ASLGroup.getChildren().add(ASL.getGroup());
+                    ASLGroup.getChildren().add(WSL.getGroup());
                 }
-                audioMediaPlayer.setAudioSpectrumListener(ASL);
+                audioMediaPlayer.setAudioSpectrumListener(WSL);
                 audioMediaPlayer.play();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         gridPane.add(musicButton, 3,0);
-        GridPane.setHalignment(musicButton, HPos.CENTER);
+        gridPane.setHalignment(musicButton, HPos.CENTER);
+        gridPane.setValignment(musicButton, VPos.BOTTOM);
 
         buttonsGridPane = gridPane;
     }
@@ -176,10 +184,12 @@ public class AudioVisualizer extends Application {
 
         ASLGroup = new Group();
         gridPane.add(ASLGroup, 0,0);
-        GridPane.setHalignment(ASLGroup, HPos.CENTER);
+        gridPane.setHalignment(ASLGroup, HPos.LEFT);
+        gridPane.setValignment(ASLGroup, VPos.CENTER);
 
         gridPane.add(buttonsGridPane, 0,1);
-        GridPane.setHalignment(buttonsGridPane, HPos.CENTER);
+        gridPane.setHalignment(buttonsGridPane, HPos.CENTER);
+        gridPane.setValignment(buttonsGridPane, VPos.BOTTOM);
 
         viewGridPane = gridPane;
     }
