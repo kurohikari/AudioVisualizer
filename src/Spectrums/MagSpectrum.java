@@ -11,10 +11,11 @@ import java.util.*;
 /**
  * Created by Arthur Geneau on 2017-01-31.
  */
-public class MagSpectrum implements AudioSpectrumListener {
+public class MagSpectrum extends Spectrum {
 
     private Rectangle[] rectangles;
     private MediaPlayer mediaPlayer;
+    private Color color;
     private Group root;
     private int numBands;
     private int div;
@@ -56,6 +57,10 @@ public class MagSpectrum implements AudioSpectrumListener {
     public void setDivs(int div) {
         this.div = div;
         makeRectangles();
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public void setMediaPlayer(MediaPlayer mediaPlayer) {

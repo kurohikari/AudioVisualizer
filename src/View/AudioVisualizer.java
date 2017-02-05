@@ -4,6 +4,7 @@ package View;
  * Created by Arthur Geneau on 2017-01-31.
  */
 
+import Spectrums.LaurentSpectrum;
 import Spectrums.MagSpectrum;
 import Spectrums.WSpectrum;
 import javafx.application.Application;
@@ -27,6 +28,7 @@ import java.io.File;
 public class AudioVisualizer extends Application {
 
     private MagSpectrum ASL;
+    private LaurentSpectrum LSL;
     private WSpectrum WSL;
     private Media audioMedia;
     private MediaPlayer audioMediaPlayer;
@@ -65,8 +67,8 @@ public class AudioVisualizer extends Application {
     }
 
     private void initialize() {
-        sceneWidth = 680;
-        sceneHeight = 360;
+        sceneWidth = 1280;
+        sceneHeight = 720;
 
         initBackground();
         //initAudio();
@@ -162,11 +164,12 @@ public class AudioVisualizer extends Application {
                 } else {
                     //ASL = new MagSpectrum(audioMediaPlayer, 0, 0);
                     //ASL.setObjWidth(2);
-                    WSL = new WSpectrum(audioMediaPlayer);
+                    //WSL = new WSpectrum(audioMediaPlayer);
+                    LSL = new LaurentSpectrum();
                     ASLGroup.getChildren().clear();
-                    ASLGroup.getChildren().add(WSL.getGroup());
+                    ASLGroup.getChildren().add(LSL.getGroup());
                 }
-                audioMediaPlayer.setAudioSpectrumListener(WSL);
+                audioMediaPlayer.setAudioSpectrumListener(LSL);
                 audioMediaPlayer.play();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -184,7 +187,7 @@ public class AudioVisualizer extends Application {
 
         ASLGroup = new Group();
         gridPane.add(ASLGroup, 0,0);
-        gridPane.setHalignment(ASLGroup, HPos.LEFT);
+        gridPane.setHalignment(ASLGroup, HPos.CENTER);
         gridPane.setValignment(ASLGroup, VPos.CENTER);
 
         gridPane.add(buttonsGridPane, 0,1);
