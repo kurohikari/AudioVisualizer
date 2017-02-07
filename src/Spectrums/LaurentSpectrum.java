@@ -16,8 +16,10 @@ public class LaurentSpectrum extends Spectrum {
     private Color color;
     private Text[] texts;
     private DropShadow[] shadows;
+    private String name;
 
     public LaurentSpectrum() {
+        name = "LSpectrum";
         group = new Group();
         color = Color.WHITE;
         String message = "Joyeux Anniversaire papa!!";
@@ -53,6 +55,11 @@ public class LaurentSpectrum extends Spectrum {
     @Override
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

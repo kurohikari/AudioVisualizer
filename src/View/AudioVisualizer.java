@@ -6,6 +6,7 @@ package View;
 
 import Spectrums.LaurentSpectrum;
 import Spectrums.MagSpectrum;
+import Spectrums.Spectrum;
 import Spectrums.WSpectrum;
 import javafx.application.Application;
 import javafx.geometry.HPos;
@@ -27,10 +28,8 @@ import java.io.File;
 
 public class AudioVisualizer extends Application {
 
-    private MagSpectrum ASL;
-    private LaurentSpectrum LSL;
-    private WSpectrum WSL;
-    private Media audioMedia;
+    private SpectrumOptions spectrumOptions;
+    private Spectrum spectrum;
     private MediaPlayer audioMediaPlayer;
     private ImageView backgroundView;
     private GridPane buttonsGridPane;
@@ -53,6 +52,7 @@ public class AudioVisualizer extends Application {
         Group group = new Group();
         group.getChildren().add(backgroundView);
         group.getChildren().add(viewGridPane);
+        group.getChildren().add(spectrumOptions.getGroup());
         Scene scene = new Scene(group, sceneWidth,sceneHeight);
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
             sceneWidth = (double) newValue;
@@ -70,8 +70,10 @@ public class AudioVisualizer extends Application {
         sceneWidth = 1280;
         sceneHeight = 720;
 
+        ASLGroup = new Group();
+
         initBackground();
-        //initAudio();
+        initOptions();
         initButtonsGridPane();
         initViewGridPane();
 
@@ -86,26 +88,17 @@ public class AudioVisualizer extends Application {
         backgroundView.setPreserveRatio(false);
     }
 
-    private void initAudio() {
-        String path = this.getClass().getResource("../Resources/Music/Ahxello-Frisbee.mp3").toString().replace("file:/", "");
-        File file = new File(path);
-        audioMedia = new Media(file.toURI().toASCIIString());
-        audioMediaPlayer = new MediaPlayer(audioMedia);
-        audioMediaPlayer.setAudioSpectrumInterval(0.05);
-        ASL = new MagSpectrum(audioMediaPlayer, 0, 300);
-        ASL.setObjWidth(2);
+    private void initOptions() {
+        spectrumOptions = new SpectrumOptions();
+        spectrumOptions.setVisualizerGroup(ASLGroup);
 
-        try {
-            audioMediaPlayer.setAudioSpectrumListener(ASL);
-            audioMediaPlayer.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void updateSize() {
         backgroundView.setFitWidth(sceneWidth);
         backgroundView.setFitHeight(sceneHeight);
+
+        spectrumOptions.updateSizes(sceneWidth, sceneHeight);
 
         buttonsGridPane.getColumnConstraints().clear();
         ColumnConstraints BcolumnConstraints = new ColumnConstraints(sceneWidth/4);
@@ -159,17 +152,13 @@ public class AudioVisualizer extends Application {
                 }
                 audioMediaPlayer = new MediaPlayer(media);
                 audioMediaPlayer.setAudioSpectrumInterval(0.05);
-                if(WSL != null) {
-                    //WSL.setMediaPlayer(audioMediaPlayer);
-                } else {
-                    //ASL = new MagSpectrum(audioMediaPlayer, 0, 0);
-                    //ASL.setObjWidth(2);
-                    //WSL = new WSpectrum(audioMediaPlayer);
-                    LSL = new LaurentSpectrum();
+                if(spectrum == null) {
+                    spectrum = spectrumOptions.getSpectrum();
                     ASLGroup.getChildren().clear();
-                    ASLGroup.getChildren().add(LSL.getGroup());
+                    ASLGroup.getChildren().add(spectrum.getGroup());
                 }
-                audioMediaPlayer.setAudioSpectrumListener(LSL);
+
+                spectrumOptions.setMediaPlayer(audioMediaPlayer);
                 audioMediaPlayer.play();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -185,9 +174,8 @@ public class AudioVisualizer extends Application {
     private void initViewGridPane() {
         GridPane gridPane = new GridPane();
 
-        ASLGroup = new Group();
         gridPane.add(ASLGroup, 0,0);
-        gridPane.setHalignment(ASLGroup, HPos.CENTER);
+        gridPane.setHalignment(ASLGroup, HPos.LEFT);
         gridPane.setValignment(ASLGroup, VPos.CENTER);
 
         gridPane.add(buttonsGridPane, 0,1);

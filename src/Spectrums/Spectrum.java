@@ -11,5 +11,6 @@ public abstract class Spectrum implements AudioSpectrumListener {
 
     public abstract Group getGroup();
     public abstract void setColor(Color color);
+    public abstract String getName();
 
 }

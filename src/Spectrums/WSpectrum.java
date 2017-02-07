@@ -15,15 +15,16 @@ public class WSpectrum extends Spectrum {
     private Group group;
     private Color color;
     private Line bottomLine;
-    private double Max_Width;
     private double XoffSet;
     private int numBands;
     private double minDB;
     private int waveHalfWidth;
+    private String name;
 
-    public WSpectrum(MediaPlayer mediaPlayer) {
-        numBands = mediaPlayer.getAudioSpectrumNumBands();
-        minDB = mediaPlayer.getAudioSpectrumThreshold();
+    public WSpectrum() {
+        name = "WSpectrum";
+        numBands = 128;
+        minDB = -60;
         waveHalfWidth = 4;
         XoffSet = 10;
         rectangles = new Rectangle[2*waveHalfWidth*numBands];
@@ -31,12 +32,19 @@ public class WSpectrum extends Spectrum {
         group = new Group();
     }
 
+    @Override
     public void setColor(Color color) {
         this.color = color;
     }
 
+    @Override
     public Group getGroup() {
         return group;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

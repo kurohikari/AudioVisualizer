@@ -1,7 +1,6 @@
 package Spectrums;
 
 import javafx.scene.Group;
-import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,9 +13,9 @@ import java.util.*;
 public class MagSpectrum extends Spectrum {
 
     private Rectangle[] rectangles;
-    private MediaPlayer mediaPlayer;
     private Color color;
     private Group root;
+    private String name;
     private int numBands;
     private int div;
     private int conf;
@@ -24,14 +23,14 @@ public class MagSpectrum extends Spectrum {
     private double Yoffset;
     private double objWidth;
 
-    public MagSpectrum(MediaPlayer mediaPlayer, double Xoffset, double Yoffset) {
-        this.mediaPlayer = mediaPlayer;
+    public MagSpectrum() {
+        name = "MSpectrum";
         this.root = new Group();
-        this.Xoffset = Xoffset;
-        this.Yoffset = Yoffset;
+        this.Xoffset = 10;
+        this.Yoffset = 0;
         this.objWidth = 1;
         this.conf = 1;
-        this.numBands = this.mediaPlayer.getAudioSpectrumNumBands();
+        this.numBands = 128;
         this.div = numBands;
         this.rectangles = new Rectangle[numBands];
         for(int i = 0; i<numBands; i++) {
@@ -44,6 +43,7 @@ public class MagSpectrum extends Spectrum {
         }
     }
 
+    @Override
     public Group getGroup() {
         return this.root;
     }
@@ -59,12 +59,14 @@ public class MagSpectrum extends Spectrum {
         makeRectangles();
     }
 
+    @Override
     public void setColor(Color color) {
         this.color = color;
     }
 
-    public void setMediaPlayer(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
