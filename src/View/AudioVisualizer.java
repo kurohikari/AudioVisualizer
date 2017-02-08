@@ -14,6 +14,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -81,7 +83,7 @@ public class AudioVisualizer extends Application {
     }
 
     private void initBackground() {
-        String path = this.getClass().getResource("../Resources/Images/background2.jpg").toString().replace("file:/", "");
+        String path = this.getClass().getResource("../Resources/Images/background3.jpg").toString().replace("file:/", "");
         File file1 = new File(path);
         Image backgroundImage = new Image(file1.toURI().toString());
         backgroundView = new ImageView(backgroundImage);
@@ -101,8 +103,8 @@ public class AudioVisualizer extends Application {
         spectrumOptions.updateSizes(sceneWidth, sceneHeight);
 
         buttonsGridPane.getColumnConstraints().clear();
-        ColumnConstraints BcolumnConstraints = new ColumnConstraints(sceneWidth/4);
-        buttonsGridPane.getColumnConstraints().addAll(BcolumnConstraints, BcolumnConstraints, BcolumnConstraints, BcolumnConstraints);
+        ColumnConstraints BcolumnConstraints = new ColumnConstraints(sceneWidth/2);
+        buttonsGridPane.getColumnConstraints().addAll(BcolumnConstraints, BcolumnConstraints);
 
         viewGridPane.getRowConstraints().clear();
         viewGridPane.getColumnConstraints().clear();
@@ -116,23 +118,71 @@ public class AudioVisualizer extends Application {
     private void initButtonsGridPane() {
         GridPane gridPane = new GridPane();
 
-        Button playButton = new Button("play");
-        playButton.setOnAction(event -> audioMediaPlayer.play());
-        gridPane.add(playButton, 0,0);
-        gridPane.setHalignment(playButton, HPos.CENTER);
-        gridPane.setValignment(playButton, VPos.BOTTOM);
+        String path = this.getClass().getResource("../Resources/Images/play.png").toString().replace("file:/", "");
+        File file1 = new File(path);
+        Image image1 = new Image(file1.toURI().toString());
+        ImageView playButton = new ImageView(image1);
+        playButton.setFitWidth(30);
+        playButton.setFitHeight(30);
+        DropShadow playShadow = new DropShadow();
+        playShadow.setColor(Color.WHITE);
+        playShadow.setSpread(0.5);
+        playShadow.setRadius(10);
+        playButton.setEffect(playShadow);
+        playButton.setOnMouseEntered(event-> playShadow.setRadius(20));
+        playButton.setOnMouseExited(event -> playShadow.setRadius(10));
+        playButton.setOnMouseClicked(event -> {
+            if(audioMediaPlayer != null) {
+                audioMediaPlayer.play();
+            }
+        });
 
-        Button pauseButton = new Button("pause");
-        pauseButton.setOnAction(event -> audioMediaPlayer.pause());
-        gridPane.add(pauseButton, 1,0);
-        gridPane.setHalignment(pauseButton, HPos.CENTER);
-        gridPane.setValignment(pauseButton, VPos.BOTTOM);
+        String path2 = this.getClass().getResource("../Resources/Images/pause.png").toString().replace("file:/", "");
+        File file2 = new File(path2);
+        Image image2 = new Image(file2.toURI().toString());
+        ImageView pauseButton = new ImageView(image2);
+        pauseButton.setTranslateX(40);
+        pauseButton.setFitWidth(30);
+        pauseButton.setFitHeight(30);
+        DropShadow pauseShadow = new DropShadow();
+        pauseShadow.setColor(Color.WHITE);
+        pauseShadow.setSpread(0.5);
+        pauseShadow.setRadius(10);
+        pauseButton.setEffect(pauseShadow);
+        pauseButton.setOnMouseEntered(event -> pauseShadow.setRadius(20));
+        pauseButton.setOnMouseExited(event -> pauseShadow.setRadius(10));
+        pauseButton.setOnMouseClicked(event -> {
+            if(audioMediaPlayer!= null) {
+                audioMediaPlayer.pause();
+            }
+        });
 
-        Button stopButton = new Button("stop");
-        stopButton.setOnAction(event -> audioMediaPlayer.stop());
-        gridPane.add(stopButton, 2,0);
+        String path3 = this.getClass().getResource("../Resources/Images/stop.png").toString().replace("file:/", "");
+        File file3 = new File(path3);
+        Image image3 = new Image(file3.toURI().toString());
+        ImageView stopButton = new ImageView(image3);
+        stopButton.setTranslateX(80);
+        stopButton.setFitWidth(30);
+        stopButton.setFitHeight(30);
+        DropShadow stopShadow = new DropShadow();
+        stopShadow.setColor(Color.WHITE);
+        stopShadow.setSpread(0.5);
+        stopShadow.setRadius(10);
+        stopButton.setEffect(stopShadow);
+        stopButton.setOnMouseEntered(event -> stopShadow.setRadius(20));
+        stopButton.setOnMouseExited(event -> stopShadow.setRadius(10));
+        stopButton.setOnMouseClicked(event -> {
+            if(audioMediaPlayer!= null) {
+                audioMediaPlayer.stop();
+            }
+        });
+
+        Group audioGroup = new Group();
+        audioGroup.getChildren().addAll(playButton, pauseButton, stopButton);
+        gridPane.add(audioGroup, 0,0);
         gridPane.setHalignment(stopButton, HPos.CENTER);
         gridPane.setValignment(stopButton, VPos.BOTTOM);
+
 
         Button musicButton = new Button("Choose Audio");
         musicButton.setOnAction(event -> {
@@ -164,7 +214,7 @@ public class AudioVisualizer extends Application {
                 e.printStackTrace();
             }
         });
-        gridPane.add(musicButton, 3,0);
+        gridPane.add(musicButton, 1,0);
         gridPane.setHalignment(musicButton, HPos.CENTER);
         gridPane.setValignment(musicButton, VPos.BOTTOM);
 
