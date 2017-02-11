@@ -28,7 +28,7 @@ public class WSpectrum extends Spectrum {
         waveHalfWidth = 4;
         XoffSet = 10;
         rectangles = new Rectangle[2*waveHalfWidth*numBands];
-        color = Color.AZURE;
+        color = Color.BLUE;
         group = new Group();
     }
 
@@ -48,13 +48,18 @@ public class WSpectrum extends Spectrum {
     }
 
     @Override
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+
+    }
+
+    @Override
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
         for(int i = 0; i<rectangles.length; i+=2*waveHalfWidth) {
             for(int j = 0; j<waveHalfWidth; j++) {
                 rectangles[i+j] = new Rectangle();
                 rectangles[i+j].setFill(color);
                 rectangles[i+j].setWidth(1);
-                rectangles[i+j].setHeight((magnitudes[i/(2*waveHalfWidth)]-minDB)*2/((waveHalfWidth-j) /* (waveHalfWidth-j)*/));
+                rectangles[i+j].setHeight((magnitudes[i/(2*waveHalfWidth)]-minDB)*2/((waveHalfWidth-j)));
                 rectangles[i+j].setTranslateX(XoffSet+j+i);
                 rectangles[i+j].setTranslateY(200-rectangles[i+j].getHeight());
             }
@@ -62,14 +67,14 @@ public class WSpectrum extends Spectrum {
                 rectangles[i+j] = new Rectangle();
                 rectangles[i+j].setFill(color);
                 rectangles[i+j].setWidth(1);
-                rectangles[i+j].setHeight((magnitudes[i/(2*waveHalfWidth)]-minDB)*2/((j-waveHalfWidth+1) /* (j-waveHalfWidth+1)*/));
+                rectangles[i+j].setHeight((magnitudes[i/(2*waveHalfWidth)]-minDB)*2/((j-waveHalfWidth+1)));
                 rectangles[i+j].setTranslateX(XoffSet+j+i);
                 rectangles[i+j].setTranslateY(200-rectangles[i+j].getHeight());
             }
         }
         Line inviLine = new Line(0,-minDB*2, 0,0);
         inviLine.setStroke(Color.TRANSPARENT);
-        bottomLine = new Line(0,0,2000,0);
+        bottomLine = new Line(0,0,numBands*2*waveHalfWidth,0);
         bottomLine.setStroke(color);
         bottomLine.setTranslateY(200);
         group.getChildren().clear();

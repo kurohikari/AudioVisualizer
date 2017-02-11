@@ -4,10 +4,7 @@ package View;
  * Created by Arthur Geneau on 2017-01-31.
  */
 
-import Spectrums.LaurentSpectrum;
-import Spectrums.MagSpectrum;
 import Spectrums.Spectrum;
-import Spectrums.WSpectrum;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -23,6 +20,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -30,7 +28,7 @@ import java.io.File;
 
 public class AudioVisualizer extends Application {
 
-    private SpectrumOptions spectrumOptions;
+    private Options options;
     private Spectrum spectrum;
     private MediaPlayer audioMediaPlayer;
     private ImageView backgroundView;
@@ -54,7 +52,7 @@ public class AudioVisualizer extends Application {
         Group group = new Group();
         group.getChildren().add(backgroundView);
         group.getChildren().add(viewGridPane);
-        group.getChildren().add(spectrumOptions.getGroup());
+        group.getChildren().add(options.getGroup());
         Scene scene = new Scene(group, sceneWidth,sceneHeight);
         scene.widthProperty().addListener((observable, oldValue, newValue) -> {
             sceneWidth = (double) newValue;
@@ -83,24 +81,20 @@ public class AudioVisualizer extends Application {
     }
 
     private void initBackground() {
-        String path = this.getClass().getResource("../Resources/Images/background3.jpg").toString().replace("file:/", "");
-        File file1 = new File(path);
-        Image backgroundImage = new Image(file1.toURI().toString());
+        Image backgroundImage = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/background3.jpg"));
         backgroundView = new ImageView(backgroundImage);
         backgroundView.setPreserveRatio(false);
     }
 
     private void initOptions() {
-        spectrumOptions = new SpectrumOptions();
-        spectrumOptions.setVisualizerGroup(ASLGroup);
+        options = new Options();
+        options.setVisualizerGroup(ASLGroup);
 
     }
 
     private void updateSize() {
         backgroundView.setFitWidth(sceneWidth);
         backgroundView.setFitHeight(sceneHeight);
-
-        spectrumOptions.updateSizes(sceneWidth, sceneHeight);
 
         buttonsGridPane.getColumnConstraints().clear();
         ColumnConstraints BcolumnConstraints = new ColumnConstraints(sceneWidth/2);
@@ -118,10 +112,9 @@ public class AudioVisualizer extends Application {
     private void initButtonsGridPane() {
         GridPane gridPane = new GridPane();
 
-        String path = this.getClass().getResource("../Resources/Images/play.png").toString().replace("file:/", "");
-        File file1 = new File(path);
-        Image image1 = new Image(file1.toURI().toString());
+        Image image1 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/play.png"));
         ImageView playButton = new ImageView(image1);
+        playButton.setTranslateX(20);
         playButton.setFitWidth(30);
         playButton.setFitHeight(30);
         DropShadow playShadow = new DropShadow();
@@ -137,11 +130,9 @@ public class AudioVisualizer extends Application {
             }
         });
 
-        String path2 = this.getClass().getResource("../Resources/Images/pause.png").toString().replace("file:/", "");
-        File file2 = new File(path2);
-        Image image2 = new Image(file2.toURI().toString());
+        Image image2 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/pause.png"));
         ImageView pauseButton = new ImageView(image2);
-        pauseButton.setTranslateX(40);
+        pauseButton.setTranslateX(60);
         pauseButton.setFitWidth(30);
         pauseButton.setFitHeight(30);
         DropShadow pauseShadow = new DropShadow();
@@ -157,11 +148,9 @@ public class AudioVisualizer extends Application {
             }
         });
 
-        String path3 = this.getClass().getResource("../Resources/Images/stop.png").toString().replace("file:/", "");
-        File file3 = new File(path3);
-        Image image3 = new Image(file3.toURI().toString());
+        Image image3 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/stop.png"));
         ImageView stopButton = new ImageView(image3);
-        stopButton.setTranslateX(80);
+        stopButton.setTranslateX(100);
         stopButton.setFitWidth(30);
         stopButton.setFitHeight(30);
         DropShadow stopShadow = new DropShadow();
@@ -178,7 +167,8 @@ public class AudioVisualizer extends Application {
         });
 
         Group audioGroup = new Group();
-        audioGroup.getChildren().addAll(playButton, pauseButton, stopButton);
+        Rectangle container = new Rectangle(150,100,Color.TRANSPARENT);
+        audioGroup.getChildren().addAll(container, playButton, pauseButton, stopButton);
         gridPane.add(audioGroup, 0,0);
         gridPane.setHalignment(stopButton, HPos.CENTER);
         gridPane.setValignment(stopButton, VPos.BOTTOM);
@@ -203,20 +193,20 @@ public class AudioVisualizer extends Application {
                 audioMediaPlayer = new MediaPlayer(media);
                 audioMediaPlayer.setAudioSpectrumInterval(0.05);
                 if(spectrum == null) {
-                    spectrum = spectrumOptions.getSpectrum();
+                    spectrum = options.getSpectrum();
                     ASLGroup.getChildren().clear();
                     ASLGroup.getChildren().add(spectrum.getGroup());
                 }
 
-                spectrumOptions.setMediaPlayer(audioMediaPlayer);
+                options.setMediaPlayer(audioMediaPlayer);
                 audioMediaPlayer.play();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
         gridPane.add(musicButton, 1,0);
         gridPane.setHalignment(musicButton, HPos.CENTER);
-        gridPane.setValignment(musicButton, VPos.BOTTOM);
+        gridPane.setValignment(musicButton, VPos.TOP);
 
         buttonsGridPane = gridPane;
     }
@@ -225,7 +215,7 @@ public class AudioVisualizer extends Application {
         GridPane gridPane = new GridPane();
 
         gridPane.add(ASLGroup, 0,0);
-        gridPane.setHalignment(ASLGroup, HPos.LEFT);
+        gridPane.setHalignment(ASLGroup, HPos.CENTER);
         gridPane.setValignment(ASLGroup, VPos.CENTER);
 
         gridPane.add(buttonsGridPane, 0,1);

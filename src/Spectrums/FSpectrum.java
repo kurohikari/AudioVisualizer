@@ -1,6 +1,7 @@
 package Spectrums;
 
 import javafx.scene.Group;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 /**
@@ -8,8 +9,10 @@ import javafx.scene.paint.Color;
  */
 public class FSpectrum extends Spectrum {
 
-    public FSpectrum() {
+    private MediaPlayer audioMediaPlayer;
 
+    public FSpectrum() {
+        audioMediaPlayer = null;
     }
 
     @Override
@@ -25,6 +28,12 @@ public class FSpectrum extends Spectrum {
     @Override
     public String getName() {
         return null;
+    }
+
+    @Override
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        audioMediaPlayer = mediaPlayer;
+        mediaPlayer.setAudioSpectrumNumBands(11025);
     }
 
     @Override

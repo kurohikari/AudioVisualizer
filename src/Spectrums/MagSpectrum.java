@@ -25,21 +25,22 @@ public class MagSpectrum extends Spectrum {
 
     public MagSpectrum() {
         name = "MSpectrum";
-        this.root = new Group();
-        this.Xoffset = 10;
-        this.Yoffset = 0;
-        this.objWidth = 1;
-        this.conf = 1;
-        this.numBands = 128;
-        this.div = numBands;
-        this.rectangles = new Rectangle[numBands];
+        root = new Group();
+        Xoffset = 10;
+        Yoffset = 0;
+        objWidth = 3;
+        conf = 1;
+        numBands = 128;
+        div = numBands;
+        color = Color.RED;
+        rectangles = new Rectangle[numBands];
         for(int i = 0; i<numBands; i++) {
             Rectangle rectangle = new Rectangle(1,0);
-            rectangle.setFill(Color.GREEN);
-            rectangle.setTranslateY(this.Yoffset);
-            rectangle.setTranslateX(this.Xoffset+i*objWidth);
+            rectangle.setFill(color);
+            rectangle.setTranslateY(Yoffset);
+            rectangle.setTranslateX(Xoffset+i*objWidth);
             rectangles[i] = rectangle;
-            this.root.getChildren().add(rectangle);
+            root.getChildren().add(rectangle);
         }
     }
 
@@ -70,6 +71,11 @@ public class MagSpectrum extends Spectrum {
     }
 
     @Override
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+
+    }
+
+    @Override
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
         int lim = numBands / div;
         for (int i = 0; i < div; i++) {
@@ -82,6 +88,7 @@ public class MagSpectrum extends Spectrum {
             rectangles[i].setTranslateY(Yoffset - ave / 2);
             rectangles[i].setHeight(ave);
             rectangles[i].setWidth(objWidth);
+            rectangles[i].setFill(color);
         }
         if(conf == 1) {
             Queue<Rectangle> rectangleQueue = new LinkedList<>();
@@ -122,14 +129,14 @@ public class MagSpectrum extends Spectrum {
     }
 
     private void makeRectangles() {
-        this.rectangles = new Rectangle[this.div];
+        rectangles = new Rectangle[div];
         for(int i = 0; i<div; i++) {
             Rectangle rectangle = new Rectangle(1,0);
             rectangle.setFill(Color.GREEN);
-            rectangle.setTranslateY(this.Yoffset);
-            rectangle.setTranslateX(this.Xoffset+i*objWidth);
+            rectangle.setTranslateY(Yoffset);
+            rectangle.setTranslateX(Xoffset+i*objWidth);
             rectangles[i] = rectangle;
-            this.root.getChildren().add(rectangle);
+            root.getChildren().add(rectangle);
         }
     }
 }

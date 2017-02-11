@@ -3,6 +3,7 @@ package Spectrums;
 import javafx.scene.Group;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.scene.text.Font;
@@ -60,6 +61,11 @@ public class LaurentSpectrum extends Spectrum {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+
     }
 
     @Override
