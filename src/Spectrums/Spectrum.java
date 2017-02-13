@@ -1,5 +1,6 @@
 package Spectrums;
 
+import View.SeekBar;
 import javafx.scene.Group;
 import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.MediaPlayer;
@@ -14,5 +15,6 @@ public abstract class Spectrum implements AudioSpectrumListener {
     public abstract void setColor(Color color);
     public abstract String getName();
     public abstract void setMediaPlayer(MediaPlayer mediaPlayer);
+    public abstract void setSeekBar(SeekBar seekBar);
 
 }

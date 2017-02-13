@@ -1,5 +1,6 @@
 package Spectrums;
 
+import View.SeekBar;
 import javafx.scene.Group;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -15,10 +16,12 @@ public class WSpectrum extends Spectrum {
     private Group group;
     private Color color;
     private Line bottomLine;
+    private MediaPlayer mediaPlayer;
     private double XoffSet;
     private int numBands;
     private double minDB;
     private int waveHalfWidth;
+    private SeekBar seekbar;
     private String name;
 
     public WSpectrum() {
@@ -49,7 +52,12 @@ public class WSpectrum extends Spectrum {
 
     @Override
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
+    }
 
+    @Override
+    public void setSeekBar(SeekBar seekBar) {
+        this.seekbar = seekBar;
     }
 
     @Override
@@ -83,5 +91,7 @@ public class WSpectrum extends Spectrum {
         }
         group.getChildren().add(bottomLine);
         group.getChildren().add(inviLine);
+        seekbar.setPosition(mediaPlayer.getCurrentTime().toMillis());
+        //System.out.println(mediaPlayer.getCurrentTime());
     }
 }

@@ -1,5 +1,6 @@
 package Spectrums;
 
+import View.SeekBar;
 import javafx.scene.Group;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -16,6 +17,8 @@ public class MagSpectrum extends Spectrum {
     private Color color;
     private Group root;
     private String name;
+    private SeekBar seekBar;
+    private MediaPlayer mediaPlayer;
     private int numBands;
     private int div;
     private int conf;
@@ -72,7 +75,12 @@ public class MagSpectrum extends Spectrum {
 
     @Override
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
+    }
 
+    @Override
+    public void setSeekBar(SeekBar seekBar) {
+        this.seekBar = seekBar;
     }
 
     @Override
@@ -126,6 +134,7 @@ public class MagSpectrum extends Spectrum {
                 this.root.getChildren().add(rectangle);
             }
         }
+        seekBar.setPosition(mediaPlayer.getCurrentTime().toMillis());
     }
 
     private void makeRectangles() {

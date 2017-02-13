@@ -1,5 +1,6 @@
 package Spectrums;
 
+import View.SeekBar;
 import javafx.scene.Group;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
@@ -15,6 +16,8 @@ public class LaurentSpectrum extends Spectrum {
 
     private Group group;
     private Color color;
+    private SeekBar seekBar;
+    private MediaPlayer mediaPlayer;
     private Text[] texts;
     private DropShadow[] shadows;
     private String name;
@@ -65,7 +68,12 @@ public class LaurentSpectrum extends Spectrum {
 
     @Override
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
+    }
 
+    @Override
+    public void setSeekBar(SeekBar seekBar) {
+        this.seekBar = seekBar;
     }
 
     @Override
@@ -91,5 +99,6 @@ public class LaurentSpectrum extends Spectrum {
             shadows[25-(i/8+k)].setRadius(radius);
             shadows[25-(i/8+k)].setColor(Color.rgb(255, 255-red, 255-red));
         }
+        seekBar.setPosition(mediaPlayer.getCurrentTime().toMillis());
     }
 }

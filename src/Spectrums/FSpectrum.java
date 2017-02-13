@@ -1,5 +1,6 @@
 package Spectrums;
 
+import View.SeekBar;
 import javafx.scene.Group;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Color;
 public class FSpectrum extends Spectrum {
 
     private MediaPlayer audioMediaPlayer;
+    private SeekBar seekBar;
 
     public FSpectrum() {
         audioMediaPlayer = null;
@@ -34,6 +36,11 @@ public class FSpectrum extends Spectrum {
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
         audioMediaPlayer = mediaPlayer;
         mediaPlayer.setAudioSpectrumNumBands(11025);
+    }
+
+    @Override
+    public void setSeekBar(SeekBar seekBar) {
+        this.seekBar = seekBar;
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.io.File;
 public class AudioVisualizer extends Application {
 
     private Options options;
+    private SeekBar seekBar;
     private Spectrum spectrum;
     private MediaPlayer audioMediaPlayer;
     private ImageView backgroundView;
@@ -76,6 +77,7 @@ public class AudioVisualizer extends Application {
         initOptions();
         initButtonsGridPane();
         initViewGridPane();
+        initSeekBar();
 
         updateSize();
     }
@@ -96,6 +98,8 @@ public class AudioVisualizer extends Application {
         backgroundView.setFitWidth(sceneWidth);
         backgroundView.setFitHeight(sceneHeight);
 
+        seekBar.resize(sceneWidth);
+
         buttonsGridPane.getColumnConstraints().clear();
         ColumnConstraints BcolumnConstraints = new ColumnConstraints(sceneWidth/2);
         buttonsGridPane.getColumnConstraints().addAll(BcolumnConstraints, BcolumnConstraints);
@@ -103,10 +107,15 @@ public class AudioVisualizer extends Application {
         viewGridPane.getRowConstraints().clear();
         viewGridPane.getColumnConstraints().clear();
         RowConstraints VrowConstraints1 = new RowConstraints(sceneHeight-100);
-        RowConstraints VrowConstraints2 = new RowConstraints(100);
         ColumnConstraints VcolumnConstraints = new ColumnConstraints(sceneWidth);
-        viewGridPane.getRowConstraints().addAll(VrowConstraints1, VrowConstraints2);
+        viewGridPane.getRowConstraints().addAll(VrowConstraints1);
         viewGridPane.getColumnConstraints().add(VcolumnConstraints);
+    }
+
+    void initSeekBar() {
+        seekBar = new SeekBar();
+        options.setSeekBar(seekBar);
+        viewGridPane.add(seekBar.getGroup(), 0,1);
     }
 
     private void initButtonsGridPane() {
@@ -122,8 +131,8 @@ public class AudioVisualizer extends Application {
         playShadow.setSpread(0.5);
         playShadow.setRadius(10);
         playButton.setEffect(playShadow);
-        playButton.setOnMouseEntered(event-> playShadow.setRadius(20));
-        playButton.setOnMouseExited(event -> playShadow.setRadius(10));
+        playButton.setOnMouseEntered(event-> playShadow.setColor(Color.GRAY));
+        playButton.setOnMouseExited(event -> playShadow.setColor(Color.WHITE));
         playButton.setOnMouseClicked(event -> {
             if(audioMediaPlayer != null) {
                 audioMediaPlayer.play();
@@ -140,8 +149,8 @@ public class AudioVisualizer extends Application {
         pauseShadow.setSpread(0.5);
         pauseShadow.setRadius(10);
         pauseButton.setEffect(pauseShadow);
-        pauseButton.setOnMouseEntered(event -> pauseShadow.setRadius(20));
-        pauseButton.setOnMouseExited(event -> pauseShadow.setRadius(10));
+        pauseButton.setOnMouseEntered(event -> pauseShadow.setColor(Color.GRAY));
+        pauseButton.setOnMouseExited(event -> pauseShadow.setColor(Color.WHITE));
         pauseButton.setOnMouseClicked(event -> {
             if(audioMediaPlayer!= null) {
                 audioMediaPlayer.pause();
@@ -158,8 +167,8 @@ public class AudioVisualizer extends Application {
         stopShadow.setSpread(0.5);
         stopShadow.setRadius(10);
         stopButton.setEffect(stopShadow);
-        stopButton.setOnMouseEntered(event -> stopShadow.setRadius(20));
-        stopButton.setOnMouseExited(event -> stopShadow.setRadius(10));
+        stopButton.setOnMouseEntered(event -> stopShadow.setColor(Color.GRAY));
+        stopButton.setOnMouseExited(event -> stopShadow.setColor(Color.WHITE));
         stopButton.setOnMouseClicked(event -> {
             if(audioMediaPlayer!= null) {
                 audioMediaPlayer.stop();
@@ -199,12 +208,14 @@ public class AudioVisualizer extends Application {
                 }
 
                 options.setMediaPlayer(audioMediaPlayer);
+                seekBar.setMediaPlayer(audioMediaPlayer);
+                audioMediaPlayer.setOnReady(() -> seekBar.setEnd(audioMediaPlayer.getMedia().getDuration().toMillis()));
                 audioMediaPlayer.play();
             } catch (Exception e) {
                 //e.printStackTrace();
             }
         });
-        gridPane.add(musicButton, 1,0);
+        gridPane.add(musicButton, 2,0);
         gridPane.setHalignment(musicButton, HPos.CENTER);
         gridPane.setValignment(musicButton, VPos.TOP);
 
@@ -218,7 +229,7 @@ public class AudioVisualizer extends Application {
         gridPane.setHalignment(ASLGroup, HPos.CENTER);
         gridPane.setValignment(ASLGroup, VPos.CENTER);
 
-        gridPane.add(buttonsGridPane, 0,1);
+        gridPane.add(buttonsGridPane, 0,2);
         gridPane.setHalignment(buttonsGridPane, HPos.CENTER);
         gridPane.setValignment(buttonsGridPane, VPos.BOTTOM);
 

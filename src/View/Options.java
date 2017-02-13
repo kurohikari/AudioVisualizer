@@ -35,6 +35,7 @@ public class Options {
     private int elems;
 
     public Options() {
+
         elems = 3;
         spectrums = new Spectrum[elems];
         spectrums[0] = new WSpectrum();
@@ -157,6 +158,12 @@ public class Options {
     private void changeListener() {
         mediaPlayer.setAudioSpectrumListener(current);
         current.setMediaPlayer(mediaPlayer);
+    }
+
+    public void setSeekBar(SeekBar s) {
+        for(Spectrum spectrum : spectrums) {
+            spectrum.setSeekBar(s);
+        }
     }
 
     public void setMediaPlayer(MediaPlayer mediaPlayer) {
