@@ -26,6 +26,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+/*
+ * Main View Class
+ * TODO Cleanup and reorganize
+ */
 public class AudioVisualizer extends Application {
 
     private Options options;
@@ -215,7 +219,7 @@ public class AudioVisualizer extends Application {
                 //e.printStackTrace();
             }
         });
-        gridPane.add(musicButton, 2,0);
+        gridPane.add(musicButton, 1,0);
         gridPane.setHalignment(musicButton, HPos.CENTER);
         gridPane.setValignment(musicButton, VPos.TOP);
 
