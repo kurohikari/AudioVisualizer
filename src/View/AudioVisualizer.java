@@ -41,6 +41,7 @@ public class AudioVisualizer extends Application {
     private GridPane viewGridPane;
     private Group ASLGroup;
     private Stage stage;
+    private boolean looping;
     private double sceneWidth;
     private double sceneHeight;
 
@@ -74,6 +75,8 @@ public class AudioVisualizer extends Application {
     private void initialize() {
         sceneWidth = 1280;
         sceneHeight = 720;
+
+        looping = false;
 
         ASLGroup = new Group();
 
@@ -127,13 +130,11 @@ public class AudioVisualizer extends Application {
 
         Image image1 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/play.png"));
         ImageView playButton = new ImageView(image1);
-        playButton.setTranslateX(20);
+        playButton.setTranslateX(40);
         playButton.setFitWidth(30);
         playButton.setFitHeight(30);
-        DropShadow playShadow = new DropShadow();
-        playShadow.setColor(Color.WHITE);
+        DropShadow playShadow = new DropShadow(10, Color.WHITE);
         playShadow.setSpread(0.5);
-        playShadow.setRadius(10);
         playButton.setEffect(playShadow);
         playButton.setOnMouseEntered(event-> playShadow.setColor(Color.GRAY));
         playButton.setOnMouseExited(event -> playShadow.setColor(Color.WHITE));
@@ -145,13 +146,11 @@ public class AudioVisualizer extends Application {
 
         Image image2 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/pause.png"));
         ImageView pauseButton = new ImageView(image2);
-        pauseButton.setTranslateX(60);
+        pauseButton.setTranslateX(80);
         pauseButton.setFitWidth(30);
         pauseButton.setFitHeight(30);
-        DropShadow pauseShadow = new DropShadow();
-        pauseShadow.setColor(Color.WHITE);
+        DropShadow pauseShadow = new DropShadow(10, Color.WHITE);
         pauseShadow.setSpread(0.5);
-        pauseShadow.setRadius(10);
         pauseButton.setEffect(pauseShadow);
         pauseButton.setOnMouseEntered(event -> pauseShadow.setColor(Color.GRAY));
         pauseButton.setOnMouseExited(event -> pauseShadow.setColor(Color.WHITE));
@@ -163,13 +162,11 @@ public class AudioVisualizer extends Application {
 
         Image image3 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/stop.png"));
         ImageView stopButton = new ImageView(image3);
-        stopButton.setTranslateX(100);
+        stopButton.setTranslateX(120);
         stopButton.setFitWidth(30);
         stopButton.setFitHeight(30);
-        DropShadow stopShadow = new DropShadow();
-        stopShadow.setColor(Color.WHITE);
+        DropShadow stopShadow = new DropShadow(10, Color.WHITE);
         stopShadow.setSpread(0.5);
-        stopShadow.setRadius(10);
         stopButton.setEffect(stopShadow);
         stopButton.setOnMouseEntered(event -> stopShadow.setColor(Color.GRAY));
         stopButton.setOnMouseExited(event -> stopShadow.setColor(Color.WHITE));
@@ -179,9 +176,35 @@ public class AudioVisualizer extends Application {
             }
         });
 
+        Image image4 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/loop.png"));
+        ImageView loopButton = new ImageView(image4);
+        loopButton.setTranslateX(160);
+        loopButton.setFitWidth(30);
+        loopButton.setFitHeight(30);
+        DropShadow loopShadow = new DropShadow(10,Color.WHITE);
+        loopShadow.setSpread(0.5);
+        loopButton.setEffect(loopShadow);
+        loopButton.setOnMouseEntered(event -> loopShadow.setColor(Color.GRAY));
+        loopButton.setOnMouseExited(event -> loopShadow.setColor(Color.WHITE));
+        loopButton.setOnMouseClicked(event -> {
+            if(audioMediaPlayer!= null) {
+                if(!looping) {
+                    // Sets cycle count to infinite if looping was false
+                    audioMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                    looping = true;
+                    loopShadow.setColor(Color.BLUE);
+                } else {
+                    // Sets cycle count to a value such that the song does not repeat
+                    audioMediaPlayer.setCycleCount(1);
+                    looping = false;
+                    loopShadow.setColor(Color.GRAY);
+                }
+            }
+        });
+
         Group audioGroup = new Group();
         Rectangle container = new Rectangle(150,100,Color.TRANSPARENT);
-        audioGroup.getChildren().addAll(container, playButton, pauseButton, stopButton);
+        audioGroup.getChildren().addAll(container, playButton, pauseButton, stopButton, loopButton);
         gridPane.add(audioGroup, 0,0);
         gridPane.setHalignment(stopButton, HPos.CENTER);
         gridPane.setValignment(stopButton, VPos.BOTTOM);

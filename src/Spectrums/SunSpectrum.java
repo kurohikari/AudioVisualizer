@@ -7,45 +7,46 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Rotate;
 
 /**
- * Created by Arthur Geneau on 2017-02-07.
+ * Created by Arthur Geneau on 2017-02-19.
  */
-public class FSpectrum extends Spectrum {
+public class SunSpectrum extends Spectrum {
 
     private MediaPlayer audioMediaPlayer;
     private SeekBar seekBar;
-    private Circle[] bubbles;
     private Group group;
+    private Line[] lines;
+    private Circle innerCircle;
+    private Circle outerCircle;
     private String name;
 
     /**
-     * Constructor for the FSpectrum Object
+     * Constructor for the SunSpectrum Object
      */
-    public FSpectrum() {
-        name="FSpectrum";
-        audioMediaPlayer = null;
-        bubbles = new Circle[20];
-
-        // sets each circle with radius 5, color yellow and a shadow
-        for(int i = 0; i<20; i++) {
-            Circle circle = new Circle();
-            circle.setCenterX(i*40 + 100);
-            circle.setRadius(5);
-            circle.setFill(Color.YELLOW);
-            DropShadow d = new DropShadow();
-            d.setRadius(30);
-            d.setSpread(0.8);
-            d.setColor(Color.YELLOW);
-            circle.setEffect(d);
-            bubbles[i] = circle;
-        }
+    public SunSpectrum() {
+        name = "SunSpectrum";
         group = new Group();
-        Line line = new Line(0,0,100,0);
-        line.setStroke(Color.BLUE);
-        group.getChildren().add(line);
-        for(Circle c : bubbles) {
-            group.getChildren().add(c);
+        innerCircle = new Circle();
+        innerCircle.setRadius(100);
+        innerCircle.setStroke(Color.YELLOW);
+        innerCircle.setFill(Color.TRANSPARENT);
+        innerCircle.setCenterX(0);
+        group.getChildren().add(innerCircle);
+        outerCircle = new Circle();
+        outerCircle.setCenterX(0);
+        outerCircle.setRadius(281);
+        outerCircle.setStroke(Color.TRANSPARENT);
+        outerCircle.setFill(Color.TRANSPARENT);
+        group.getChildren().add(outerCircle);
+        lines = new Line[2160];
+        for(int i = 0; i<2160; i++) {
+            Line line = new Line(100,0,101,0);
+            line.setStroke(Color.WHITE);
+            line.getTransforms().add(new Rotate(i/6.0));
+            lines[i] = line;
+            group.getChildren().add(lines[i]);
         }
     }
 
@@ -64,10 +65,8 @@ public class FSpectrum extends Spectrum {
      */
     @Override
     public void setColor(Color color) {
-        for(Circle c : bubbles) {
-            c.setFill(color);
-            DropShadow d = (DropShadow) c.getEffect();
-            d.setColor(color);
+        for(Line line : lines) {
+            line.setStroke(color);
         }
     }
 
@@ -110,27 +109,13 @@ public class FSpectrum extends Spectrum {
      */
     @Override
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
-        int k = 0;
-        int i = 0;
-
-        // keep looping while all the circles have not been updated
-        while(k<20) {
-            // sets how many frequencies are used to evaluate each circle
-            int l = (int) (1+k*1.73);
-            double max = -60;
-            for(int j = 0; j<l; j++) {
-                // updates max when a new max has been found
-                if(magnitudes[i+j] > max) {
-                    max = magnitudes[i+j] + 60;
-                }
-            }
-            i += l;
-            max = max*20/60;
-            if(max > -20) {
-                // sets the radius of the circles if the band magnitude was not -60DB
-                bubbles[k].setRadius(5 + max);
-            }
-            k++;
+        for(int i = 0; i<360; i++) {
+            lines[i].setEndX((101+magnitudes[i+100]*3 + 180));
+            lines[i+360].setEndX((101+magnitudes[i+100]*3 + 180));
+            lines[i+720].setEndX((101+magnitudes[i+100]*3 + 180));
+            lines[i+1080].setEndX((101+magnitudes[i+100]*3 + 180));
+            lines[i+1440].setEndX((101+magnitudes[i+100]*3 + 180));
+            lines[i+1800].setEndX((101+magnitudes[i+100]*3 + 180));
         }
 
         // Updates the seek bar
