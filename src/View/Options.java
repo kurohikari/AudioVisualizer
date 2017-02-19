@@ -1,9 +1,6 @@
 package View;
 
-import Spectrums.LaurentSpectrum;
-import Spectrums.MagSpectrum;
-import Spectrums.Spectrum;
-import Spectrums.WSpectrum;
+import Spectrums.*;
 import javafx.geometry.HPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -36,11 +33,12 @@ public class Options {
 
     public Options() {
 
-        elems = 3;
+        elems = 4;
         spectrums = new Spectrum[elems];
-        spectrums[0] = new WSpectrum();
-        spectrums[1] = new MagSpectrum();
-        spectrums[2] = new LaurentSpectrum();
+        spectrums[0] = new FSpectrum();
+        spectrums[1] = new WSpectrum();
+        spectrums[2] = new MagSpectrum();
+        spectrums[3] = new LaurentSpectrum();
 
         current = spectrums[0];
 
@@ -120,9 +118,9 @@ public class Options {
 
         Button applyButton = new Button("Apply");
         applyButton.setOnAction(event -> {
-            mediaPlayer.setAudioSpectrumNumBands(128);
             if(mediaPlayer != null) {
                 if(nextSpectrum != null) {
+                    mediaPlayer.setAudioSpectrumNumBands(128);
                     current = nextSpectrum;
                     changeListener();
                     nextSpectrum = null;
