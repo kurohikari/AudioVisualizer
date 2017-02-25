@@ -128,65 +128,82 @@ public class AudioVisualizer extends Application {
     private void initButtonsGridPane() {
         GridPane gridPane = new GridPane();
 
-        Image image1 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/play.png"));
-        ImageView playButton = new ImageView(image1);
-        playButton.setTranslateX(40);
-        playButton.setFitWidth(30);
-        playButton.setFitHeight(30);
-        DropShadow playShadow = new DropShadow(10, Color.WHITE);
-        playShadow.setSpread(0.5);
-        playButton.setEffect(playShadow);
-        playButton.setOnMouseEntered(event-> playShadow.setColor(Color.GRAY));
-        playButton.setOnMouseExited(event -> playShadow.setColor(Color.WHITE));
+        // Instantiates play button
+        ImageView playButton = makeAudioButton("Resources/Images/play.png", 40);
+        playButton.setOnMouseEntered(event-> {
+            DropShadow playShadow = (DropShadow) playButton.getEffect();
+            // Sets shadow to gray when entering the play button
+            playShadow.setColor(Color.GRAY);
+        });
+        playButton.setOnMouseExited(event -> {
+            DropShadow playShadow = (DropShadow) playButton.getEffect();
+            // Sets shadow to white when leaving the play button
+            playShadow.setColor(Color.WHITE);
+        });
         playButton.setOnMouseClicked(event -> {
             if(audioMediaPlayer != null) {
                 audioMediaPlayer.play();
             }
         });
 
-        Image image2 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/pause.png"));
-        ImageView pauseButton = new ImageView(image2);
-        pauseButton.setTranslateX(80);
-        pauseButton.setFitWidth(30);
-        pauseButton.setFitHeight(30);
-        DropShadow pauseShadow = new DropShadow(10, Color.WHITE);
-        pauseShadow.setSpread(0.5);
-        pauseButton.setEffect(pauseShadow);
-        pauseButton.setOnMouseEntered(event -> pauseShadow.setColor(Color.GRAY));
-        pauseButton.setOnMouseExited(event -> pauseShadow.setColor(Color.WHITE));
+        // Instantiates pause button
+        ImageView pauseButton = makeAudioButton("Resources/Images/pause.png", 80);
+        pauseButton.setOnMouseEntered(event -> {
+            DropShadow pauseShadow = (DropShadow) pauseButton.getEffect();
+            // Sets shadow to gray when entering the pause button
+            pauseShadow.setColor(Color.GRAY);
+        });
+        pauseButton.setOnMouseExited(event -> {
+            DropShadow pauseShadow = (DropShadow) pauseButton.getEffect();
+            // Sets shadow to white when leaving the pause button
+            pauseShadow.setColor(Color.WHITE);
+        });
         pauseButton.setOnMouseClicked(event -> {
             if(audioMediaPlayer!= null) {
                 audioMediaPlayer.pause();
             }
         });
 
-        Image image3 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/stop.png"));
-        ImageView stopButton = new ImageView(image3);
-        stopButton.setTranslateX(120);
-        stopButton.setFitWidth(30);
-        stopButton.setFitHeight(30);
-        DropShadow stopShadow = new DropShadow(10, Color.WHITE);
-        stopShadow.setSpread(0.5);
-        stopButton.setEffect(stopShadow);
-        stopButton.setOnMouseEntered(event -> stopShadow.setColor(Color.GRAY));
-        stopButton.setOnMouseExited(event -> stopShadow.setColor(Color.WHITE));
+        // Instantiates stop button
+        ImageView stopButton = makeAudioButton("Resources/Images/stop.png", 120);
+        stopButton.setOnMouseEntered(event -> {
+            DropShadow stopShadow = (DropShadow) stopButton.getEffect();
+            // Sets shadow to gray when entering the stop button
+            stopShadow.setColor(Color.GRAY);
+        });
+        stopButton.setOnMouseExited(event -> {
+            DropShadow stopShadow = (DropShadow) stopButton.getEffect();
+            // Sets shadow to white when leaving the stop button
+            stopShadow.setColor(Color.WHITE);
+        });
         stopButton.setOnMouseClicked(event -> {
             if(audioMediaPlayer!= null) {
                 audioMediaPlayer.stop();
             }
         });
 
-        Image image4 = new Image(getClass().getClassLoader().getResourceAsStream("Resources/Images/loop.png"));
-        ImageView loopButton = new ImageView(image4);
-        loopButton.setTranslateX(160);
-        loopButton.setFitWidth(30);
-        loopButton.setFitHeight(30);
-        DropShadow loopShadow = new DropShadow(10,Color.WHITE);
-        loopShadow.setSpread(0.5);
-        loopButton.setEffect(loopShadow);
-        loopButton.setOnMouseEntered(event -> loopShadow.setColor(Color.GRAY));
-        loopButton.setOnMouseExited(event -> loopShadow.setColor(Color.WHITE));
+        // Instantiates loop button
+        ImageView loopButton = makeAudioButton("Resources/Images/loop.png", 160);
+        loopButton.setOnMouseEntered(event -> {
+            DropShadow loopShadow = (DropShadow) loopButton.getEffect();
+            // Sets the shadow of the button to gray when entering the button and looping is disables, else sets it to dark blue when looping is enabled
+            if(!looping) {
+                loopShadow.setColor(Color.GRAY);
+            } else {
+                loopShadow.setColor(Color.DARKBLUE);
+            }
+        });
+        loopButton.setOnMouseExited(event -> {
+            DropShadow loopShadow = (DropShadow) loopButton.getEffect();
+            // Sets the shadow of the button to white when leaving the button and looping is disables, else sets it to blue when looping is enabled
+            if(!looping) {
+                loopShadow.setColor(Color.WHITE);
+            } else {
+                loopShadow.setColor(Color.BLUE);
+            }
+        });
         loopButton.setOnMouseClicked(event -> {
+            DropShadow loopShadow = (DropShadow) loopButton.getEffect();
             if(audioMediaPlayer!= null) {
                 if(!looping) {
                     // Sets cycle count to infinite if looping was false
@@ -247,6 +264,28 @@ public class AudioVisualizer extends Application {
         gridPane.setValignment(musicButton, VPos.TOP);
 
         buttonsGridPane = gridPane;
+    }
+
+    /**
+     * Method called to create the play, pause, stop and loop button
+     * @return an ImageView with the right format to be a button
+     */
+    private ImageView makeAudioButton(String relPath, double xOffset) {
+        // Creates the ImageView
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream(relPath));
+        ImageView button = new ImageView(image);
+
+        // Sets parameters for the ImageView
+        button.setTranslateX(xOffset);
+        button.setFitWidth(30);
+        button.setFitHeight(30);
+
+        // Adds shadow effect to the ImageView
+        DropShadow shadow = new DropShadow(10,Color.WHITE);
+        shadow.setSpread(0.5);
+        button.setEffect(shadow);
+
+        return button;
     }
 
     private void initViewGridPane() {
