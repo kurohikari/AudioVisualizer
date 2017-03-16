@@ -19,12 +19,16 @@ public class SSpectrum extends Spectrum {
     private SeekBar seekBar;
     private double[] lasts;
     private String name;
+    private float last;
+    private boolean decay;
 
     /**
      * Constructor for the SSpectrum Object
      */
     public SSpectrum() {
         // Initializes variables
+        last = 0;
+        decay = false;
         name = "SSpectrum";
         color = Color.WHITE;
         lines = new Line[600];

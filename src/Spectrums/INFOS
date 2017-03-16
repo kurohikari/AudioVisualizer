@@ -30,3 +30,11 @@ According to Wikipedia
 |-----------|----------------------------------|
 | 6000-16000| Brilliance                       |
 |-----------|----------------------------------|
+
+Note frequency approx= First note frequency * 2^(octave-1)
+ex:
+C1 = 32 Hz,  C5 = 32 * 2^4 = 32 * 16 = 512 Hz
+A1 = 55 Hz, A2 = 55 * 2 = 110 Hz, A4 = 55 * 2^3 = 55 * 8 = 440 Hz
+
+Relation harmonic and subharmonic:
+subharmonic frequency = harmonic frequency * i (i>=2)

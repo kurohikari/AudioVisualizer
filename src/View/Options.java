@@ -33,14 +33,16 @@ public class Options {
 
     public Options() {
 
-        elems = 6;
+        elems = 8;
         spectrums = new Spectrum[elems];
-        spectrums[0] = new SSpectrum();
-        spectrums[1] = new SunSpectrum();
-        spectrums[2] = new FSpectrum();
-        spectrums[3] = new WSpectrum();
-        spectrums[4] = new MagSpectrum();
-        spectrums[5] = new LaurentSpectrum();
+        spectrums[0] = new SpSpectrum();
+        spectrums[1] = new PSpectrum();
+        spectrums[2] = new SSpectrum();
+        spectrums[3] = new SunSpectrum();
+        spectrums[4] = new FSpectrum();
+        spectrums[5] = new WSpectrum();
+        spectrums[6] = new MagSpectrum();
+        spectrums[7] = new LaurentSpectrum();
 
         current = spectrums[0];
 
